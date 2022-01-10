@@ -1,17 +1,31 @@
 package com.example.activitytest
 
 import android.app.Activity
+import android.app.Instrumentation
 import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import com.example.activitytest.databinding.FirstLayoutBinding
 
 class FirstActivity : AppCompatActivity() {
+
+    //registerForActivityResult()方法接收两个参数：
+    //第一个参数是一种Contract类型，由于我们是希望从另外一个Activity中请求数据，因此这里使用了StartActivityForResult这种Contract。
+    //第二个参数是一个Lambda表达式，当有结果返回时则会回调到这里，然后我们在这里获取并处理数据即可。
+    //registerForActivityResult()方法的返回值是一个ActivityResultLauncher对象，这个对象当中有一个launch()方法可以用于去启用Intent。
+    private val requestDataLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        if (it.resultCode == RESULT_OK) {
+            val data = it.data?.getStringExtra("data")
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 //        //传统方法
@@ -60,6 +74,7 @@ class FirstActivity : AppCompatActivity() {
 //            startActivity(intent)
 //        }
 
+//        //向SecondActivity传递数据
 //        binding.button1.setOnClickListener {
 //            val data = "Hello SecondActivity"
 //            val intent = Intent(this, SecondActivity::class.java)
@@ -69,9 +84,17 @@ class FirstActivity : AppCompatActivity() {
 //            startActivity(intent)
 //        }
 
+//        binding.button1.setOnClickListener {
+//            val intent = Intent(this, SecondActivity::class.java)
+//            //该函数用来获取SecondActivity的intent数据，目前已被官方废弃。
+//            startActivityForResult(intent, 1)
+//        }
+
         binding.button1.setOnClickListener {
             val intent = Intent(this, SecondActivity::class.java)
-            startActivityForResult(intent, 1)
+            //最开始通过registerForActivityResult()方法的返回值是一个ActivityResultLauncher对象，这个对象当中有一个launch()方法可以用于去启用Intent。
+            //因此不需要再调用startActivityForResult()方法了，而是直接调用launch()方法，并把Intent传入即可。
+            requestDataLauncher.launch(intent)
         }
 
     }
@@ -95,4 +118,22 @@ class FirstActivity : AppCompatActivity() {
         }
         return true
     }
+
+//    //通过上面startActivityForResult函数获取SecondActivity的intent数据，但目前该函数已被官方废弃。
+//    //onActivityResult()方法带有3个参数：
+//    //第一个参数requestCode，即在启动Activity时传入的请求码；
+//    //第二个参数resultCode，即我们在返回数据时传入的处理结果；
+//    //第三个参数data，即携带着返回数据的Intent。
+//    //由于在一个Activity中有可能调用startActivityForResult()方法去启动很多不同的Activity，每一个Activity返回的数据都会回调到onActivityResult()这个方法中,因此首先要做的就是通过检查requestCode的值来判断数据来源。
+//    //确定数据是从SecondActivity返回的之后，再通过resultCode的值来判断处理结果是否成功。
+//    //最后从data中取值并打印出来，这样就完成了向上一个Activity返回数据的工作。
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        super.onActivityResult(requestCode, resultCode, data)
+//        when (requestCode) {
+//            1 -> if (resultCode == RESULT_OK) {
+//                val returnedData = data?.getStringExtra("data_return")
+//                Log.d("FirstActivity", "returned data is $returnedData")
+//            }
+//        }
+//    }
 }
