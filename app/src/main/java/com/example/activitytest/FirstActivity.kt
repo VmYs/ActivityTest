@@ -2,6 +2,7 @@ package com.example.activitytest
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
@@ -33,13 +34,46 @@ class FirstActivity : AppCompatActivity() {
 //            startActivity(intent)
 //        }
 
-        //隐式intent
-        //只有<action>和<category>中的内容同时匹配Intent中指定的action和category时，这个Activity才能响应该Intent
-        //这里没有指定category，因为android.intent.category.DEFAULT是一种默认的category，在调用startActivity()方法的时候会自动将这个category添加到Intent中
+//        //隐式intent
+//        //只有<action>和<category>中的内容同时匹配Intent中指定的action和category时，这个Activity才能响应该Intent
+//        //这里没有指定category，因为android.intent.category.DEFAULT是一种默认的category，在调用startActivity()方法的时候会自动将这个category添加到Intent中
+//        binding.button1.setOnClickListener {
+//            val intent = Intent("com.example.activitytest.ACTION_START")
+//            startActivity(intent)
+//        }
+
+//        //首先指定了Intent的action是Intent.ACTION_VIEW，这是一个Android系统内置的动作。
+//        //其常量值为android.intent.action.VIEW，用于显示用户的数据。比较通用，会根据用户的数据类型打开相应的Activity。
+//        //然后通过Uri.parse()方法将一个网址字符串解析成一个Uri对象，再调用Intent的setData()方法将这个Uri对象传递进去。
+//        //当然，这里再次使用了语法糖，看上去像是给Intent的data属性赋值一样。
+//        binding.button1.setOnClickListener {
+//            val intent = Intent(Intent.ACTION_VIEW)
+//            intent.data = Uri.parse("https://www.baidu.com")
+//            startActivity(intent)
+//        }
+
+//        //首先指定了Intent的action是Intent.ACTION_DIAL，这又是一个Android系统的内置动作。
+//        //然后在data部分指定了协议是tel，号码是10086。
+//        binding.button1.setOnClickListener {
+//            val intent = Intent(Intent.ACTION_DIAL)
+//            intent.data = Uri.parse("tel:10086")
+//            startActivity(intent)
+//        }
+
+//        binding.button1.setOnClickListener {
+//            val data = "Hello SecondActivity"
+//            val intent = Intent(this, SecondActivity::class.java)
+//            //通过putExtra()方法传递了一个字符串。
+//            //putExtra()方法接收两个参数，第一个参数是键，用于之后从Intent中取值，第二个参数才是真正要传递的数据。
+//            intent.putExtra("extra_data", data)
+//            startActivity(intent)
+//        }
+
         binding.button1.setOnClickListener {
-            val intent = Intent("com.example.activitytest.ACTION_START")
-            startActivity(intent)
+            val intent = Intent(this, SecondActivity::class.java)
+            startActivityForResult(intent, 1)
         }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
