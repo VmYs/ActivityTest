@@ -14,7 +14,7 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import com.example.activitytest.databinding.FirstLayoutBinding
 
-class FirstActivity : AppCompatActivity() {
+class FirstActivity : BaseActivity() {
 
     //registerForActivityResult()方法接收两个参数：
     //第一个参数是一种Contract类型，由于我们是希望从另外一个Activity中请求数据，因此这里使用了StartActivityForResult这种Contract。
@@ -22,7 +22,8 @@ class FirstActivity : AppCompatActivity() {
     //registerForActivityResult()方法的返回值是一个ActivityResultLauncher对象，这个对象当中有一个launch()方法可以用于去启用Intent。
     private val requestDataLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         if (it.resultCode == RESULT_OK) {
-            val data = it.data?.getStringExtra("data")
+            val returnedData = it.data?.getStringExtra("data_return")
+            Log.d("FirstActivity", "returned data is $returnedData")
         }
     }
 
@@ -38,6 +39,7 @@ class FirstActivity : AppCompatActivity() {
 //        //通过在build.gradle中添加viewBinding的配置启用该功能
         val binding = FirstLayoutBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        Log.d("FirstActivity", this.toString())
 //        binding.button1.setOnClickListener {
 //            Toast.makeText(this, "You clicked Button 1", Toast.LENGTH_SHORT).show()
 //        }
@@ -95,7 +97,17 @@ class FirstActivity : AppCompatActivity() {
             //最开始通过registerForActivityResult()方法的返回值是一个ActivityResultLauncher对象，这个对象当中有一个launch()方法可以用于去启用Intent。
             //因此不需要再调用startActivityForResult()方法了，而是直接调用launch()方法，并把Intent传入即可。
             requestDataLauncher.launch(intent)
+            startActivity(intent)
         }
+
+//        //用于打印当前Activity实例，查看Activity的默认启动模式standard的情况。
+//        //通过打印信息中可以看出，每点击一次按钮，就会创建出一个新的FirstActivity实例。
+//        //此时返回栈中若存在3个FirstActivity的实例，则需要连按3次Back键才能退出程序。
+//        Log.d("FirstActivity", this.toString())
+//        binding.button1.setOnClickListener {
+//            val intent = Intent(this, FirstActivity::class.java)
+//            startActivity(intent)
+//        }
 
     }
 
@@ -136,4 +148,9 @@ class FirstActivity : AppCompatActivity() {
 //            }
 //        }
 //    }
+
+    override fun onRestart() {
+        super.onRestart()
+        Log.d("FirstActivity", "onRestart")
+    }
 }

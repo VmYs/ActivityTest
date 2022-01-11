@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import com.example.activitytest.databinding.SecondLayoutBinding
 
-class SecondActivity : AppCompatActivity() {
+class SecondActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = SecondLayoutBinding.inflate(layoutInflater)
@@ -17,17 +17,19 @@ class SecondActivity : AppCompatActivity() {
 //        val extraData = intent.getStringExtra("extra_data")
 //        Log.d("SecondActivity", "extra data is $extraData")
 
+        Log.d("SecondActivity", this.toString())
 
         //setResult()方法非常重要，专门用于向上一个Activity返回数据。setResult()方法接收两个参数：
         //第一个参数用于向上一个Activity返回处理结果，一般只使用RESULT_OK或RESULT_CANCELED这两个值；
         //第二个参数则把带有数据的Intent传递回去。
         //最后调用了finish()方法来销毁当前Activity。
         binding.button2.setOnClickListener {
-            val intent = Intent()
+            val intent = Intent(this, FirstActivity::class.java)
             intent.putExtra("data_return", "Hello FirstActivity")
             setResult(RESULT_OK, intent)
-            finish()
+            startActivity(intent)
         }
+
     }
 
 //    //通过在SecondActivity中重写onBackPressed()方法，当用户按下Back键后，就会执行onBackPressed()方法中的代码。
@@ -37,4 +39,9 @@ class SecondActivity : AppCompatActivity() {
 //        setResult(RESULT_OK, intent)
 //        finish()
 //    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d("SecondActivity", "onDestroy")
+    }
 }
