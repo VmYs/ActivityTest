@@ -24,10 +24,10 @@ class SecondActivity : BaseActivity() {
         //第二个参数则把带有数据的Intent传递回去。
         //最后调用了finish()方法来销毁当前Activity。
         binding.button2.setOnClickListener {
-            val intent = Intent(this, FirstActivity::class.java)
+            val intent = Intent()
             intent.putExtra("data_return", "Hello FirstActivity")
             setResult(RESULT_OK, intent)
-            startActivity(intent)
+            finish()
         }
 
     }

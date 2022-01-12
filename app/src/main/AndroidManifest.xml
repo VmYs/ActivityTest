@@ -10,7 +10,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ActivityTest">
-        <activity android:name=".ThirdActivity">
+        <activity
+            android:name=".ThirdActivity"
+            android:label="This is ThirdActivity">
             <!--
             由于Android Studio认为所有能够响应ACTION_VIEW的Activity都应该加上BROWSABLE的category，否则就会给出一段警告提醒。
             加上BROWSABLE的category是为了实现deep link功能，和目前学习的东西无关，所以这里直接在<intent-filter>标签上使用tools:ignore属性将警告忽略即可。
